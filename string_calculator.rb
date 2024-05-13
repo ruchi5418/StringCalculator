@@ -1,12 +1,13 @@
 require 'rspec/autorun'
+require 'byebug'
 
 def StringCalculator(numbers)
     return 0 if numbers.empty?
-    numbers.to_i if numbers.size == 1
 
-    numbers.split(",").map(&:to_i).sum
+    return numbers.to_i if numbers.size == 1
 
     delimiter = ","
+
     if numbers.start_with?("//")
       delimiter = numbers[2]
       numbers = numbers[(numbers.index("\n") + 1)..-1]
@@ -16,6 +17,7 @@ def StringCalculator(numbers)
 
     sum = 0
     negatives = []
+    byebug
 
     numbers.each do |num|
       if num.to_i.negative?
@@ -53,23 +55,23 @@ describe "#StringCalculator" do
         it "returns the sum of the numbers" do
             expect(StringCalculator("1\n2,3")).to eq(3)
         end
-      end
+    end
   
-      context "with custom delimiter" do
+    context "with custom delimiter" do
         it "returns the sum of the numbers" do
             expect(StringCalculator("//;\n1;2")).to eq(3)
         end
-      end
+    end
   
-      context "with negative numbers" do
+    context "with negative numbers" do
         it "raises an exception" do
             expect(StringCalculator("-1,2")).to raise_error("Negative numbers not allowed: -1")
         end
-      end
+    end
   
-      context "with multiple negative numbers" do
+    context "with multiple negative numbers" do
         it "raises an exception" do
           expect { StringCalculator("-1,-2,3,-4") }.to raise_error("Negative numbers not allowed: -1,-2,-4")
         end
-      end
+    end
 end
